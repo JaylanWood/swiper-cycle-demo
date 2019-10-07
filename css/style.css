@@ -1,0 +1,86 @@
+* {
+	margin: 0%;
+	padding: 0%;
+	/* border: 1px red solid; */
+	/* box-sizing: border-box; */
+}
+
+.clearfix::after {
+	content: '';
+	display: block;
+	clear: both
+}
+
+/*
+布局思路
+总div相对body用margin居中即可，
+
+图片区不用管，就是文档流在总div里，
+图片区的图片横排，用的是flex布局，
+
+控制区相对总div用position定位，
+控制区的箭头和按钮列，用flex的space-between两端对齐,flex-end对齐底部;
+*/
+
+/*总div*/
+
+.slides {
+	position: relative;
+	width: 300px;
+	height: 200px;
+	margin: 100px auto;
+	/* overflow: hidden; */
+}
+
+/* 图片区 */
+
+.slides>.images {
+	display: flex;
+	transform: translateX(-300px);
+	transition: all 1s;
+}
+
+.slides>.images>img {
+	width: 100%;
+	/* 不加这句会引起flex布局弹性收缩bug */
+}
+
+/* 控制区 */
+
+.slides>.control {
+	position: absolute;
+	top: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	width: 100%;
+}
+
+/* 箭头区 */
+
+.slides>.control>.arrows {
+	width: 30px;
+	/* height: 100%; */
+	/* background: red; */
+	text-align: center;
+	line-height: 60px;
+	margin: 70px 10px;
+	border-radius: 3px;
+}
+
+.slides>.control>.arrows:hover {
+	background: rgba(0, 0, 0, 0.2);
+	color: white;
+}
+
+.slides>.control>#left {}
+
+.slides>.control>#right {}
+
+/* 按钮区 */
+
+.slides>.control>.buttons {
+	margin-bottom: 10px;
+}
+
+.slides>.control>.buttons>button {}
