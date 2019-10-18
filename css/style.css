@@ -29,18 +29,18 @@
 	width: 300px;
 	height: 200px;
 	margin: 100px auto;
-	/* overflow: hidden; */
+	overflow: hidden;
 }
 
 /* 图片区 */
 
-.slides>.images {
+.slides>.imgWrapper {
 	display: flex;
 	transform: translateX(-300px);
 	transition: all 1s;
 }
 
-.slides>.images>img {
+.slides>.imgWrapper>img {
 	width: 100%;
 	/* 不加这句会引起flex布局弹性收缩bug */
 }
@@ -73,14 +73,8 @@
 	color: white;
 }
 
-.slides>.control>#left {}
-
-.slides>.control>#right {}
-
 /* 按钮区 */
 
-.slides>.control>.buttons {
+.slides>.control>.buttonWrapper {
 	margin-bottom: 10px;
 }
-
-.slides>.control>.buttons>button {}

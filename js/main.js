@@ -1,73 +1,71 @@
 //获取所有元素
-let $buttons = $('.buttons>button')
-let $images = $('#images')
-let $arrows = $('.arrows')
+let $buttons = $('#buttonWrapper>button')
+let $slides = $('#imgWrapper')
+let $imgs = $('#imgWrapper>img')
 let current = 0
-let target = 0
-//1.点击按钮跳转页面
-//1-1.绑定按钮点击事件
-//第一到第四张都是
-$buttons.eq(0).on('click', function () {
-    if (current == 3) {
-        console.log('从最后一张到第一张')
-        $images.css({
-            transform: 'translateX(-1500px)'
-        }).one('transitionend', function () {
-            $images.hide().css({
-                transform: 'translateX(-300px)'
-            }).offset()
-            $images.show()
-        })
+bindEvents()
+
+//绑定按钮点击事件
+function bindEvents() {
+    $('#buttonWrapper').on('click', 'button', function (e) {
+        let $button = $(e.currentTarget)
+        let index = $button.index()
+        gotToSlides(index)
+    })
+}
+//上下一张
+$('#right').on('click', function () {
+    gotToSlides(current + 1)
+})
+$('#left').on('click', function () {
+    gotToSlides(current - 1)
+})
+//自动下一张
+let timer = setInterval(function () {
+    gotToSlides(current + 1)
+}, 2000)
+//鼠标移入移出暂停继续自动播放
+$('#slides').on('mouseenter', function () {
+    window.clearInterval(timer)
+}).on('mouseleave', function () {
+    timer = setInterval(function () {
+        gotToSlides(current + 1)
+    }, 2000)
+})
+
+//私有函数封装
+function gotToSlides(index) {
+    if (index > $buttons.length - 1) {
+        index = 0
+    } else if (index < 0) {
+        index = $buttons.length - 1
+    }
+    if (current === $buttons.length - 1 && index === 0) {
+        //从最后到第一张
+        $slides.css({
+                transform: `translateX(${-($buttons.length+1)*300}px)`
+            })
+            .one('transitionend', function () {
+                $slides.hide().offset()
+                $slides.css({
+                    transform: `translateX(${-(index+1)*300}px)`
+                }).show()
+            })
+    } else if (current === 0 && index === $buttons.length - 1) {
+        //从第一张到最后
+        $slides.css({
+                transform: `translateX(0px)`
+            })
+            .one('transitionend', function () {
+                $slides.hide().offset()
+                $slides.css({
+                    transform: `translateX(${-(index+1)*300}px)`
+                }).show()
+            })
     } else {
-        $images.css({
-            transform: 'translateX(-300px)'
+        $slides.css({
+            transform: `translateX(${-(index+1)*300}px)`
         })
     }
-
-    current = 0
-})
-$buttons.eq(1).on('click', function () {
-    console.log(current)
-    $images.css({
-        transform: 'translateX(-600px)'
-    })
-    current = 1
-})
-$buttons.eq(2).on('click', function () {
-    console.log(current)
-    $images.css({
-        transform: 'translateX(-900px)'
-    })
-    current = 2
-})
-$buttons.eq(3).on('click', function () {
-    if (current == 0) {
-        console.log('从第一张到最后一张')
-        $images.css({
-            transform: 'translateX(0px)'
-        }).one('transitionend', function () {
-            $images.hide().css({
-                transform: 'translateX(-1200px)'
-            }).offset()
-            $images.show()
-        })
-    } else {
-        $images.css({
-            transform: 'translateX(-1200px)'
-        })
-    }
-
-    current = 3
-})
-
-//2.自动跳转页面
-// setInterval(function(){
-// console.log('1')
-// },2000)
-//3.点击箭头跳转页面
-$arrows.on('click', function (e) {
-    // console.log($(e.target))
-    $(e.target).css({
-        'background': 'green'
-    })
-});
+    current = index
+}
